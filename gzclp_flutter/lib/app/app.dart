@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gzclp_flutter/home/view/view.dart';
+import 'package:gzclp_flutter/theme/theme.dart';
 import 'package:settings_repository/settings_repository.dart';
 
 class App extends StatelessWidget {
@@ -8,7 +11,22 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return RepositoryProvider.value(
+      value: settingsRepository,
+      child: const AppView(),
+    );
+  }
+}
+
+class AppView extends StatelessWidget {
+  const AppView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: GzlcpTheme.light,
+      darkTheme: GzlcpTheme.dark,
+      home: const HomePage(),
+    );
   }
 }
