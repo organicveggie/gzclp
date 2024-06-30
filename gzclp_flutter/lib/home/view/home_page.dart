@@ -22,54 +22,61 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedTab = context.select((HomeCubit cubit) => cubit.state.tab);
+    final ThemeData theme = Theme.of(context);
 
     return Scaffold(
-      body: IndexedStack(
-        index: selectedTab.index,
-        children: const [],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        shape: const CircleBorder(),
-        key: const Key('homeView_settings_floatingActionButton'),
-        onPressed: () => log('settings button pushed'),
-        child: const Icon(Icons.add),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _HomeTabButton(
-              groupValue: selectedTab,
-              value: HomeTab.settings,
-              icon: const Icon(Icons.list_rounded),
-            )
-          ],
+      body: Card(
+        shadowColor: Colors.transparent,
+        margin: const EdgeInsets.all(8.0),
+        child: SizedBox.expand(
+          child: Center(
+              child: Text(
+            'Home Page',
+            style: theme.textTheme.titleLarge,
+          )),
         ),
       ),
+      bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (int index) {
+          // TODO
+          log('NavigationBar selected: $index');
+        },
+        selectedIndex: 0,
+        destinations: const [
+          NavigationDestination(
+            selectedIcon: Icon(Icons.home),
+            icon: Icon(Icons.home_outlined),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.settings),
+            icon: Icon(Icons.settings_outlined),
+            label: 'Settings',
+          ),
+        ],
+      ),
     );
   }
 }
 
-class _HomeTabButton extends StatelessWidget {
-  const _HomeTabButton({
-    required this.groupValue,
-    required this.value,
-    required this.icon,
-  });
+// class _HomeTabButton extends StatelessWidget {
+//   const _HomeTabButton({
+//     required this.groupValue,
+//     required this.value,
+//     required this.icon,
+//   });
 
-  final HomeTab groupValue;
-  final HomeTab value;
-  final Widget icon;
+//   final HomeTab groupValue;
+//   final HomeTab value;
+//   final Widget icon;
 
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () => context.read<HomeCubit>().setTab(value),
-      iconSize: 32,
-      color: groupValue != value ? null : Theme.of(context).colorScheme.secondary,
-      icon: icon,
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return IconButton(
+//       onPressed: () => context.read<HomeCubit>().setTab(value),
+//       iconSize: 32,
+//       color: groupValue != value ? null : Theme.of(context).colorScheme.secondary,
+//       icon: icon,
+//     );
+//   }
+// }
