@@ -2,11 +2,20 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:settings_api/settings_api.dart';
 
+class TestSettingsApi extends SettingsApi {
+  const TestSettingsApi() : super();
+
+  @override
+  Stream<AppSettings> getAppSettings() => throw UnimplementedError("getAppSettings");
+
+  @override
+  Future<void> saveAppSettings(AppSettings settings) => throw UnimplementedError("saveAppSettings");
+}
+
 void main() {
-  test('adds one to input values', () {
-    final calculator = Calculator();
-    expect(calculator.addOne(2), 3);
-    expect(calculator.addOne(-7), -6);
-    expect(calculator.addOne(0), 1);
+  group(SettingsApi, () {
+    test('can be constructed', () {
+      expect(TestSettingsApi.new, returnsNormally);
+    });
   });
 }
