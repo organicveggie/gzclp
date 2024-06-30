@@ -13,13 +13,13 @@ abstract class AppSettings implements Built<AppSettings, AppSettingsBuilder> {
   factory AppSettings.withDefaults() {
     return AppSettings((b) => b
       ..gender = Gender.xy
-      ..units = WeightUnits.lb
+      ..units = WeightUnit.lb
       ..microplates = true
       ..barWeight = BarWeight.kg20);
   }
 
   Gender get gender;
-  WeightUnits get units;
+  WeightUnit get units;
   bool get microplates;
   BarWeight get barWeight;
 }
