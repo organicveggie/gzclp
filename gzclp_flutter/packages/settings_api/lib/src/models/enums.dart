@@ -10,7 +10,7 @@ class Gender extends EnumClass {
   static const Gender xx = _$xx;
   static const Gender xy = _$xy;
 
-  const Gender._(String name) : super(name);
+  const Gender._(super.name);
 
   static BuiltSet<Gender> get values => _$values;
   static Gender valueOf(String name) => _$valueOf(name);
@@ -22,7 +22,7 @@ class WeightUnit extends EnumClass {
   static const WeightUnit kg = _$kg;
   static const WeightUnit lb = _$lb;
 
-  const WeightUnit._(String name) : super(name);
+  const WeightUnit._(super.name);
 
   static BuiltSet<WeightUnit> get values => _$weightUnitValues;
   static WeightUnit valueOf(String name) => _$valueOfWU(name);
@@ -35,7 +35,7 @@ class BarWeight extends EnumClass {
   static const BarWeight kg20 = _$kg20;
   static const BarWeight kg15 = _$kg15;
 
-  const BarWeight._(String name) : super(name);
+  const BarWeight._(super.name);
 
   static BuiltSet<BarWeight> get values => _$barWeightValues;
   static BarWeight valueOf(String name) => _$valueOfBW(name);
