@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gzclp_flutter/home/view/view.dart';
+import 'package:gzclp_flutter/start/view/view.dart';
 import 'package:gzclp_flutter/theme/theme.dart';
 import 'package:settings_repository/settings_repository.dart';
 
@@ -26,7 +26,7 @@ class AppView extends StatelessWidget {
     return MaterialApp(
       theme: GzlcpTheme.light,
       darkTheme: GzlcpTheme.dark,
-      home: const HomePage(),
+      home: const StartPage(),
     );
   }
 }
