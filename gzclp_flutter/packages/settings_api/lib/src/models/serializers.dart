@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:built_value/serializer.dart';
 
@@ -20,9 +22,14 @@ class SettingsApiSerializer {
 
   late final Serializers _standardSerializers;
 
-  AppSettings? appSettingsFromJson(Map<String, dynamic> json) =>
-      _standardSerializers.deserializeWith(AppSettings.serializer, json);
+  AppSettings? appSettingsFromJson(String? json) =>
+      _standardSerializers.deserializeWith(AppSettings.serializer, jsonDecode(json ?? ''));
 
-  String? appSettingsToJson(AppSettings settings) =>
-      _standardSerializers.serializeWith(AppSettings.serializer, settings)?.toString();
+  String? appSettingsToJson(AppSettings settings) {
+    final serializedValue = _standardSerializers.serializeWith(AppSettings.serializer, settings);
+    if (serializedValue != null) {
+      return jsonEncode(serializedValue);
+    }
+    return null;
+  }
 }

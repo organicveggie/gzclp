@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:rxdart/subjects.dart';
 import 'package:settings_api/settings_api.dart';
@@ -26,8 +25,7 @@ class LocalStorageSettingsApi extends SettingsApi {
   void _init() {
     final appSettingsJson = _getValue(kAppSettingsKey);
     if (appSettingsJson != null) {
-      final json = jsonDecode(appSettingsJson);
-      final settings = _settingsApiSerializer.appSettingsFromJson(json);
+      final settings = _settingsApiSerializer.appSettingsFromJson(appSettingsJson);
       _settingsStreamController.add(settings ?? AppSettings.withDefaults());
     } else {
       _settingsStreamController.add(AppSettings.withDefaults());

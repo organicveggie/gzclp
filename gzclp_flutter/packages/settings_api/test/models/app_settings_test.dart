@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:test/test.dart';
 import 'package:settings_api/settings_api.dart';
 
@@ -15,18 +13,17 @@ void main() {
     group('serialize', () {
       final serializer = SettingsApiSerializer();
 
+      const rawJson = '''{"gender":"xy","units":"lb","microplates":false,"barWeight":"kg20"}''';
+
       group('from json', () {
         test('works with valid json', () {
-          const rawJson =
-              '''{"gender": "xy", "units": "lb", "microplates": false, "barWeight": "kg20"}''';
-          final json = jsonDecode(rawJson);
           final expected = AppSettings((b) => b
             ..gender = Gender.xy
             ..units = WeightUnit.lb
             ..microplates = false
             ..barWeight = BarWeight.kg20);
 
-          final settings = serializer.appSettingsFromJson(json);
+          final settings = serializer.appSettingsFromJson(rawJson);
           expect(settings, equals(expected));
         });
       });
@@ -39,8 +36,7 @@ void main() {
             ..microplates = false
             ..barWeight = BarWeight.kg20);
           final json = serializer.appSettingsToJson(settings);
-          const expected = '{gender: xy, units: lb, microplates: false, barWeight: kg20}';
-          expect(json, equals(expected));
+          expect(json, equals(rawJson));
         });
       });
     });
