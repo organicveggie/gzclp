@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gzclp_flutter/settings/cubit/settings_cubit.dart';
+import 'package:settings_repository/settings_repository.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -8,7 +9,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SettingsCubit(),
+      create: (_) => SettingsCubit(context.read<SettingsRepository>()),
       child: const SettingsView(),
     );
   }
