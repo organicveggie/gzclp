@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,18 +27,75 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shadowColor: Colors.transparent,
-      margin: const EdgeInsets.all(8.0),
-      child: SizedBox.expand(
-        child: Column(children: [
-          GenderDropdownWidget(),
-          Padding(padding: const EdgeInsets.only(top: 5), child: WeightUnitDropdownWidget()),
-          const Padding(padding: EdgeInsets.only(top: 5), child: MicroplatesSettingWidget()),
-          Padding(padding: const EdgeInsets.only(top: 5), child: BarWeightDropdownWidget()),
-        ]),
-      ),
-    );
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Settings'),
+          shadowColor: Colors.transparent,
+        ),
+        body: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: SizedBox(
+                    height: 50.0,
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          constraints: const BoxConstraints(maxHeight: 50.0, maxWidth: 400),
+                          child: Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(right: 10.0),
+                                child: Icon(Icons.wc),
+                              ),
+                              const Text('Gender'),
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: DropdownMenu<Gender>(
+                                    initialSelection: context.select(
+                                        (SettingsCubit cubit) => cubit.state.appSettings.gender),
+                                    requestFocusOnTap: true,
+                                    onSelected: (Gender? newValue) {
+                                      context
+                                          .read<SettingsCubit>()
+                                          .setGender(newValue ?? Gender.xy);
+                                    },
+                                    dropdownMenuEntries:
+                                        Gender.values.map<DropdownMenuEntry<Gender>>((g) {
+                                      return DropdownMenuEntry(
+                                        value: g,
+                                        label: g.name,
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            )));
+    // return Card(
+    //   shadowColor: Colors.transparent,
+    //   margin: const EdgeInsets.all(8.0),
+    //   child: SizedBox.expand(
+    //     child: Column(children: [
+    //       GenderDropdownWidget(),
+    //       Padding(padding: const EdgeInsets.only(top: 5), child: WeightUnitDropdownWidget()),
+    //       const Padding(padding: EdgeInsets.only(top: 5), child: MicroplatesSettingWidget()),
+    //       Padding(padding: const EdgeInsets.only(top: 5), child: BarWeightDropdownWidget()),
+    //     ]),
+    //   ),
+    // );
   }
 }
 
