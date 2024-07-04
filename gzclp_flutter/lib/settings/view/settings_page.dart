@@ -3,6 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gzclp_flutter/settings/cubit/settings_cubit.dart';
+import 'package:gzclp_flutter/settings/view/tier1_exercises_page.dart';
+import 'package:gzclp_flutter/settings/view/tier2_exercises_page.dart';
+import 'package:gzclp_flutter/settings/view/tier3_exercises_page.dart';
 import 'package:settings_repository/settings_repository.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -104,7 +107,10 @@ class SettingsView extends StatelessWidget {
               title: 'Tier 1 Exercises',
               rowHeight: rowHeight,
               maxRowWidth: maxRowWidth,
-              onTap: () => log('ListTile for Tier 1 Exercises'),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Tier1ExercisesPage()),
+              ),
             ),
             SettingRowListTile(
               leadingIcon: const Icon(Icons.military_tech),
@@ -112,7 +118,10 @@ class SettingsView extends StatelessWidget {
               title: 'Tier 2 Exercises',
               rowHeight: rowHeight,
               maxRowWidth: maxRowWidth,
-              onTap: () => log('ListTile for Tier 2 Exercises'),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Tier2ExercisesPage()),
+              ),
             ),
             SettingRowListTile(
               leadingIcon: const Icon(Icons.military_tech),
@@ -120,7 +129,10 @@ class SettingsView extends StatelessWidget {
               title: 'Tier 3 Exercises',
               rowHeight: rowHeight,
               maxRowWidth: maxRowWidth,
-              onTap: () => log('ListTile for Tier 3 Exercises'),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Tier3ExercisesPage()),
+              ),
             ),
           ],
         ),
