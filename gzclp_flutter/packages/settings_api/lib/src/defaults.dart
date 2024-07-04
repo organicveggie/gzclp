@@ -2,25 +2,25 @@ import 'package:built_collection/built_collection.dart';
 
 import 'models/exercise.dart';
 
-final defaultTier1Exercies = BuiltList<Exercise>.of([
-  Exercise.byName('Bench'),
-  Exercise.byName('Squat'),
-  Exercise.byName('OHP'),
+final defaultTier1Exercises = BuiltList<Exercise>.of([
+  Exercise.byName('Bench Press'),
   Exercise.byName('Deadlift'),
+  Exercise.byName('Overhead Press'),
+  Exercise.byName('Squat'),
 ]);
 
 final defaultTier2Exercises = BuiltList<Exercise>.of([
-  Exercise.byName('Legs Up Bench'),
-  Exercise.byName('Close Grip Bench Press'),
-  Exercise.byName('Paused Bench'),
-  Exercise.byName('Incline Bench'),
-  Exercise.byName('Front Squat'),
+  Exercise.byName('Bench Press'),
   Exercise.byName('Barbell Row'),
-  Exercise.byName('Sumo Deadlift'),
-  Exercise.byName('Bench'),
-  Exercise.byName('Squat'),
-  Exercise.byName('OHP'),
+  Exercise.byName('Close Grip Bench Press'),
   Exercise.byName('Deadlift'),
+  Exercise.byName('Front Squat'),
+  Exercise.byName('Incline Bench'),
+  Exercise.byName('Legs Up Bench'),
+  Exercise.byName('Overhead Press'),
+  Exercise.byName('Paused Bench Press'),
+  Exercise.byName('Squat'),
+  Exercise.byName('Sumo Deadlift'),
 ]);
 
 final defaultTier3Exercises = BuiltList<Exercise>.of([
@@ -49,7 +49,7 @@ final defaultTier3Exercises = BuiltList<Exercise>.of([
   Exercise.byName('Good Mornings'),
   Exercise.byName('Hammer Curl'),
   Exercise.byName('Hip Thrust'),
-  Exercise.byName('Incline DB Bench'),
+  Exercise.byName('Incline DB Bench Press'),
   Exercise.byName('Lateral Raises'),
   Exercise.byName('Lat Pulldowns'),
   Exercise.byName('Leg Curls'),
@@ -71,6 +71,7 @@ final defaultTier3Exercises = BuiltList<Exercise>.of([
   Exercise.byName('Step Ups'),
   Exercise.byName('Tricep Extention'),
   Exercise.byName('Tricep Pushdowns (bar)'),
+  Exercise.byName('Tricep Pushdowns (strap)'),
   Exercise.byName('Upright Row'),
   Exercise.byName('Weighted Hyperextensions'),
 ]);

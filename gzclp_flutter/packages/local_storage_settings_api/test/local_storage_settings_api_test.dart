@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:local_storage_settings_api/local_storage_settings_api.dart';
 import 'package:mocktail/mocktail.dart';
@@ -8,12 +9,18 @@ class MockSharedPreferences extends Mock implements SharedPreferences {}
 
 void main() {
   group(LocalStorageSettingsApi, () {
-    const rawJson = '''{"gender": "xx", "units": "kg", "microplates": true, "barWeight": "kg15"}''';
+    const rawJson = '{"gender": "xx", "units": "kg", "microplates": true, "barWeight": "kg15",'
+        '"tier1Exercises":[{"name":"Bench Press"}],'
+        '"tier2Exercises":[{"name":"Sumo Deadlift"}],'
+        '"tier3Exercises":[{"name":"Bicep Curls"}]}';
     final appSettings = AppSettings((b) => b
       ..gender = Gender.xx
       ..units = WeightUnit.kg
       ..microplates = true
-      ..barWeight = BarWeight.kg15);
+      ..barWeight = BarWeight.kg15
+      ..tier1Exercises = BuiltList<Exercise>.of([Exercise.byName('Bench Press')]).toBuilder()
+      ..tier2Exercises = BuiltList<Exercise>.of([Exercise.byName('Sumo Deadlift')]).toBuilder()
+      ..tier3Exercises = BuiltList<Exercise>.of([Exercise.byName('Bicep Curls')]).toBuilder());
 
     late SharedPreferences plugin;
 

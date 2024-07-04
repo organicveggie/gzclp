@@ -16,6 +16,7 @@ dependencies:
   rxdart: ^0.28.0
   built_value: ^8.9.2
   mocktail: ^1.0.4
+  built_collection: ^5.1.1
 
 dev_dependencies:
   flutter_test:
