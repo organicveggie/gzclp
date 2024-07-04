@@ -7,6 +7,7 @@ class GzlcpTheme {
       colorScheme: ColorScheme.fromSeed(
         seedColor: const Color(0xFF13B9FF),
       ),
+      useMaterial3: true,
       snackBarTheme: const SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
       ),
@@ -22,6 +23,7 @@ class GzlcpTheme {
         brightness: Brightness.dark,
         seedColor: const Color(0xFF13B9FF),
       ),
+      useMaterial3: true,
       snackBarTheme: const SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
       ),
