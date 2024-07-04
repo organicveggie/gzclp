@@ -1,7 +1,9 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
 import 'enums.dart';
+import 'exercise.dart';
 
 part 'app_settings.g.dart';
 
@@ -22,4 +24,8 @@ abstract class AppSettings implements Built<AppSettings, AppSettingsBuilder> {
   WeightUnit get units;
   bool get microplates;
   BarWeight get barWeight;
+
+  BuiltList<Exercise> get tier1Exercises;
+  BuiltList<Exercise> get tier2Exercises;
+  BuiltList<Exercise> get tier3Exercises;
 }
