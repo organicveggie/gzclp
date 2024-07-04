@@ -1,12 +1,9 @@
 import 'dart:developer';
 
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gzclp_flutter/settings/cubit/settings_cubit.dart';
 import 'package:settings_repository/settings_repository.dart';
-
-const _settingLabelWidth = 200.0;
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -21,9 +18,8 @@ class SettingsPage extends StatelessWidget {
 }
 
 class SettingsView extends StatelessWidget {
-  static const labelWidth = 200;
   static const rowHeight = 50.0;
-  static const rowMaxWidth = 400.0;
+  static const maxRowWidth = 400.0;
 
   const SettingsView({super.key});
 
@@ -37,8 +33,6 @@ class SettingsView extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: ListView(
-          // mainAxisAlignment: MainAxisAlignment.start,
-          // crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             SettingRowInputWidget(
               icon: const Icon(Icons.wc),
@@ -109,7 +103,7 @@ class SettingsView extends StatelessWidget {
               trailingIcon: const Icon(Icons.arrow_right),
               title: 'Tier 1 Exercises',
               rowHeight: rowHeight,
-              rowWidth: rowMaxWidth,
+              maxRowWidth: maxRowWidth,
               onTap: () => log('ListTile for Tier 1 Exercises'),
             ),
             SettingRowListTile(
@@ -117,7 +111,7 @@ class SettingsView extends StatelessWidget {
               trailingIcon: const Icon(Icons.arrow_right),
               title: 'Tier 2 Exercises',
               rowHeight: rowHeight,
-              rowWidth: rowMaxWidth,
+              maxRowWidth: maxRowWidth,
               onTap: () => log('ListTile for Tier 2 Exercises'),
             ),
             SettingRowListTile(
@@ -125,7 +119,7 @@ class SettingsView extends StatelessWidget {
               trailingIcon: const Icon(Icons.arrow_right),
               title: 'Tier 3 Exercises',
               rowHeight: rowHeight,
-              rowWidth: rowMaxWidth,
+              maxRowWidth: maxRowWidth,
               onTap: () => log('ListTile for Tier 3 Exercises'),
             ),
           ],
@@ -165,14 +159,13 @@ abstract class SettingRowWidget extends StatelessWidget {
   }
 }
 
-class SettingRowInputWidget extends StatelessWidget {
-  static const rowHeight = 50.0;
-  static const rowMaxWidth = 400.0;
-
+class SettingRowInputWidget extends SettingRowWidget {
   const SettingRowInputWidget({
     required this.icon,
     required this.label,
     required this.child,
+    super.rowHeight,
+    super.maxRowWidth,
     super.key,
   });
 
@@ -181,41 +174,32 @@ class SettingRowInputWidget extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.center,
-      child: SizedBox(
-        height: rowHeight,
-        child: Container(
-          constraints: const BoxConstraints(maxHeight: rowHeight, maxWidth: rowMaxWidth),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 10.0),
-                child: icon,
-              ),
-              Text(label),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: child,
-                ),
-              ),
-            ],
+  Widget buildChild(BuildContext context) {
+    return Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(right: 10.0),
+          child: icon,
+        ),
+        Text(label),
+        Expanded(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: child,
           ),
         ),
-      ),
+      ],
     );
   }
 }
 
-class SettingRowListTile extends StatelessWidget {
+class SettingRowListTile extends SettingRowWidget {
   const SettingRowListTile({
     this.leadingIcon,
     this.trailingIcon,
     required this.title,
-    required this.rowHeight,
-    required this.rowWidth,
+    super.rowHeight,
+    super.maxRowWidth,
     required this.onTap,
     super.key,
   });
@@ -226,27 +210,15 @@ class SettingRowListTile extends StatelessWidget {
 
   final Function() onTap;
 
-  final double rowHeight;
-  final double rowWidth;
-
   @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.center,
-      child: SizedBox(
-        height: rowHeight,
-        child: Container(
-          constraints: BoxConstraints(maxHeight: rowHeight, maxWidth: rowWidth),
-          child: Material(
-            child: ListTile(
-              contentPadding: const EdgeInsets.all(0.0),
-              leading: leadingIcon,
-              title: Text(title),
-              trailing: trailingIcon,
-              onTap: onTap,
-            ),
-          ),
-        ),
+  Widget buildChild(BuildContext context) {
+    return Material(
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(0.0),
+        leading: leadingIcon,
+        title: Text(title),
+        trailing: trailingIcon,
+        onTap: onTap,
       ),
     );
   }
