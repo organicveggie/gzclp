@@ -36,6 +36,33 @@ class LocalStorageSettingsApi extends SettingsApi {
   Stream<AppSettings> getAppSettings() => _settingsStreamController.asBroadcastStream();
 
   @override
+  void loadDefaultAppSettings() {
+    _settingsStreamController.add(AppSettings.withDefaults());
+  }
+
+  @override
+  void loadDefaultTier1Exercises() {
+    final settings = _settingsStreamController.value;
+    final newSettings =
+        settings.rebuild((b) => b..tier1Exercises = defaultTier1Exercises.toBuilder());
+    _settingsStreamController.add(newSettings);
+  }
+
+  @override
+  void loadDefaultTier2Exercises() {
+    final settings = _settingsStreamController.value;
+    _settingsStreamController
+        .add(settings.rebuild((b) => b..tier2Exercises = defaultTier2Exercises.toBuilder()));
+  }
+
+  @override
+  void loadDefaultTier3Exercises() {
+    final settings = _settingsStreamController.value;
+    _settingsStreamController
+        .add(settings.rebuild((b) => b..tier3Exercises = defaultTier3Exercises.toBuilder()));
+  }
+
+  @override
   Future<void> saveAppSettings(AppSettings settings) {
     final appSettingsJson = _settingsApiSerializer.appSettingsToJson(settings);
     if (appSettingsJson != null) {

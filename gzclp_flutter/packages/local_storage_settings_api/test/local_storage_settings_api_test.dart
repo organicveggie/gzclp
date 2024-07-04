@@ -54,5 +54,46 @@ void main() {
         });
       });
     });
+
+    group('loads', () {
+      test('all defaults', () {
+        final subject = createSubject();
+        subject.loadDefaultAppSettings();
+        expect(subject.getAppSettings(), emits(AppSettings.withDefaults()));
+      });
+
+      test('tier 1 defaults', () async {
+        final subject = createSubject();
+        await subject.saveAppSettings(appSettings);
+
+        final modifiedSettings =
+            appSettings.rebuild((b) => b..tier1Exercises = defaultTier1Exercises.toBuilder());
+
+        subject.loadDefaultTier1Exercises();
+        expect(subject.getAppSettings(), emits(modifiedSettings));
+      });
+
+      test('tier 2 defaults', () async {
+        final subject = createSubject();
+        await subject.saveAppSettings(appSettings);
+
+        final modifiedSettings =
+            appSettings.rebuild((b) => b..tier2Exercises = defaultTier2Exercises.toBuilder());
+
+        subject.loadDefaultTier2Exercises();
+        expect(subject.getAppSettings(), emits(modifiedSettings));
+      });
+
+      test('tier 3 defaults', () async {
+        final subject = createSubject();
+        await subject.saveAppSettings(appSettings);
+
+        final modifiedSettings =
+            appSettings.rebuild((b) => b..tier3Exercises = defaultTier3Exercises.toBuilder());
+
+        subject.loadDefaultTier3Exercises();
+        expect(subject.getAppSettings(), emits(modifiedSettings));
+      });
+    });
   });
 }
