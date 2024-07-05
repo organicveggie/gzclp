@@ -12,9 +12,9 @@ class SettingsRepository {
     return _settingsApi.getAppSettings();
   }
 
-  Future<void> saveAppSettings(AppSettings settings) {
+  Future<void> saveAppSettings() {
     log('SettingsRepository.saveAppSettings()');
-    return _settingsApi.saveAppSettings(settings);
+    return _settingsApi.saveAppSettings();
   }
 
   Stream<ExerciseSettings> getExerciseSettings() {
@@ -24,7 +24,7 @@ class SettingsRepository {
 
   Future<void> addExercise(ExerciseTier tier, Exercise exercise) {
     log('SettingsRepository.addExercise()');
-    final newSettings = _settingsApi.addExercise(tier, exercise);
-    return _settingsApi.saveExerciseSettings(newSettings);
+    _settingsApi.addExercise(tier, exercise);
+    return _settingsApi.saveExerciseSettings();
   }
 }

@@ -6,10 +6,13 @@ import 'package:settings_api/settings_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorageSettingsApi extends SettingsApi {
-  LocalStorageSettingsApi({required SharedPreferences plugin})
+  LocalStorageSettingsApi(
+      {required SharedPreferences plugin,
+      AppSettings? appSettings,
+      ExerciseSettings? exerciseSettings})
       : _settingsApiSerializer = SettingsApiSerializer(),
         _plugin = plugin {
-    _init();
+    _init(appSettings, exerciseSettings);
   }
 
   final SharedPreferences _plugin;
@@ -26,21 +29,29 @@ class LocalStorageSettingsApi extends SettingsApi {
   String? _getValue(String key) => _plugin.getString(key);
   Future<void> _setValue(String key, String value) => _plugin.setString(key, value);
 
-  void _init() {
-    final appSettingsJson = _getValue(kAppSettingsKey);
-    if (appSettingsJson != null) {
-      final settings = _settingsApiSerializer.appSettingsFromJson(appSettingsJson);
-      _settingsStreamController.add(settings ?? AppSettings.withDefaults());
+  void _init(AppSettings? appSettings, ExerciseSettings? exerciseSettings) {
+    if (appSettings != null) {
+      _settingsStreamController.add(appSettings);
     } else {
-      _settingsStreamController.add(AppSettings.withDefaults());
+      final appSettingsJson = _getValue(kAppSettingsKey);
+      if (appSettingsJson != null) {
+        final settings = _settingsApiSerializer.appSettingsFromJson(appSettingsJson);
+        _settingsStreamController.add(settings ?? AppSettings.withDefaults());
+      } else {
+        _settingsStreamController.add(AppSettings.withDefaults());
+      }
     }
 
-    final exerciseSettingsJson = _getValue(kExerciseSettingsKey);
-    if (exerciseSettingsJson != null) {
-      final settings = _settingsApiSerializer.exerciseSettingsFromJson(exerciseSettingsJson);
-      _exerciseSettingsStreamController.add(settings ?? ExerciseSettings.withDefaults());
+    if (exerciseSettings != null) {
+      _exerciseSettingsStreamController.add(exerciseSettings);
     } else {
-      _exerciseSettingsStreamController.add(ExerciseSettings.withDefaults());
+      final exerciseSettingsJson = _getValue(kExerciseSettingsKey);
+      if (exerciseSettingsJson != null) {
+        final settings = _settingsApiSerializer.exerciseSettingsFromJson(exerciseSettingsJson);
+        _exerciseSettingsStreamController.add(settings ?? ExerciseSettings.withDefaults());
+      } else {
+        _exerciseSettingsStreamController.add(ExerciseSettings.withDefaults());
+      }
     }
   }
 
@@ -71,7 +82,8 @@ class LocalStorageSettingsApi extends SettingsApi {
   }
 
   @override
-  Future<void> saveAppSettings(AppSettings settings) {
+  Future<void> saveAppSettings() {
+    final settings = _settingsStreamController.value;
     final appSettingsJson = _settingsApiSerializer.appSettingsToJson(settings);
     if (appSettingsJson != null) {
       return _setValue(kAppSettingsKey, appSettingsJson);
@@ -85,7 +97,8 @@ class LocalStorageSettingsApi extends SettingsApi {
       _exerciseSettingsStreamController.asBroadcastStream();
 
   @override
-  Future<void> saveExerciseSettings(ExerciseSettings settings) {
+  Future<void> saveExerciseSettings() {
+    final settings = _exerciseSettingsStreamController.value;
     final settingsJson = _settingsApiSerializer.exerciseSettingsToJson(settings);
     if (settingsJson != null) {
       return _setValue(kExerciseSettingsKey, settingsJson);

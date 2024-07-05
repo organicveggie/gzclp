@@ -41,8 +41,10 @@ void main() {
       when(() => plugin.setString(any(), any())).thenAnswer((_) async => true);
     });
 
-    LocalStorageSettingsApi createSubject() {
-      return LocalStorageSettingsApi(plugin: plugin);
+    LocalStorageSettingsApi createSubject(
+        {AppSettings? appSettings, ExerciseSettings? exerciseSettings}) {
+      return LocalStorageSettingsApi(
+          plugin: plugin, appSettings: appSettings, exerciseSettings: exerciseSettings);
     }
 
     group('constructor', () {
@@ -81,6 +83,33 @@ void main() {
       });
     });
 
+    group('saves', () {
+      test('app settings', () {
+        final subject = createSubject(appSettings: appSettings);
+        subject.saveAppSettings();
+
+        final serializer = SettingsApiSerializer();
+        final json = serializer.appSettingsToJson(appSettings);
+        verify(() => plugin.setString(LocalStorageSettingsApi.kAppSettingsKey, json!)).called(1);
+      });
+
+      test('exercise settings', () {
+        final settings = ExerciseSettings((b) => b
+          ..exercises = BuiltMap<ExerciseTier, BuiltList<Exercise>>.of({
+            ExerciseTier.tier1: BuiltList<Exercise>.of(
+                [Exercise.byName('Bench Press'), Exercise.byName('Deadlift')]),
+          }).toBuilder());
+        final subject = createSubject(exerciseSettings: settings);
+        subject.saveExerciseSettings();
+
+        final serializer = SettingsApiSerializer();
+        final json = serializer.exerciseSettingsToJson(settings);
+
+        verify(() => plugin.setString(LocalStorageSettingsApi.kExerciseSettingsKey, json!))
+            .called(1);
+      });
+    });
+
     group('loads', () {
       test('app settings defaults', () {
         final subject = createSubject();
@@ -89,9 +118,7 @@ void main() {
       });
 
       test('tier 1 defaults', () async {
-        final subject = createSubject();
-        await subject.saveExerciseSettings(exerciseSettings);
-
+        final subject = createSubject(exerciseSettings: exerciseSettings);
         final modifiedSettings = exerciseSettings.put(ExerciseTier.tier1, defaultTier1Exercises);
 
         subject.loadDefaultTier1Exercises();
@@ -99,9 +126,7 @@ void main() {
       });
 
       test('tier 2 defaults', () async {
-        final subject = createSubject();
-        await subject.saveExerciseSettings(exerciseSettings);
-
+        final subject = createSubject(exerciseSettings: exerciseSettings);
         final modifiedSettings = exerciseSettings.put(ExerciseTier.tier2, defaultTier2Exercises);
 
         subject.loadDefaultTier2Exercises();
@@ -109,8 +134,8 @@ void main() {
       });
 
       test('tier 3 defaults', () async {
-        final subject = createSubject();
-        await subject.saveExerciseSettings(exerciseSettings);
+        final subject = createSubject(exerciseSettings: exerciseSettings);
+        await subject.saveExerciseSettings();
 
         final modifiedSettings = exerciseSettings.put(ExerciseTier.tier3, defaultTier3Exercises);
 

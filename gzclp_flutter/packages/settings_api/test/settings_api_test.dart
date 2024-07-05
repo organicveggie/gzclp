@@ -9,42 +9,29 @@ class TestSettingsApi extends SettingsApi {
   Stream<AppSettings> getAppSettings() => throw UnimplementedError('getAppSettings');
 
   @override
-  Future<void> saveAppSettings(AppSettings settings) => throw UnimplementedError('saveAppSettings');
+  Future<void> saveAppSettings() => throw UnimplementedError('saveAppSettings');
 
   @override
-  void loadDefaultAppSettings() {
-    throw UnimplementedError('loadDefaultAppSettings');
-  }
+  void loadDefaultAppSettings() => throw UnimplementedError('loadDefaultAppSettings');
 
   @override
-  void loadDefaultTier1Exercises() {
-    throw UnimplementedError('loadDefaultTier1Exercises');
-  }
+  void loadDefaultTier1Exercises() => throw UnimplementedError('loadDefaultTier1Exercises');
 
   @override
-  void loadDefaultTier2Exercises() {
-    throw UnimplementedError('loadDefaultTier2Exercises');
-  }
+  void loadDefaultTier2Exercises() => throw UnimplementedError('loadDefaultTier2Exercises');
 
   @override
-  void loadDefaultTier3Exercises() {
-    throw UnimplementedError('loadDefaultTier3Exercises');
-  }
+  void loadDefaultTier3Exercises() => throw UnimplementedError('loadDefaultTier3Exercises');
 
   @override
-  Stream<ExerciseSettings> getExerciseSettings() {
-    throw UnimplementedError('getExerciseSettings');
-  }
+  Stream<ExerciseSettings> getExerciseSettings() => throw UnimplementedError('getExerciseSettings');
 
   @override
-  Future<void> saveExerciseSettings(ExerciseSettings settings) {
-    throw UnimplementedError('saveExerciseSettings');
-  }
+  Future<void> saveExerciseSettings() => throw UnimplementedError('saveExerciseSettings');
 
   @override
-  ExerciseSettings addExercise(ExerciseTier tier, Exercise exercise) {
-    throw UnimplementedError('addExercise');
-  }
+  ExerciseSettings addExercise(ExerciseTier tier, Exercise exercise) =>
+      throw UnimplementedError('addExercise');
 }
 
 void main() {

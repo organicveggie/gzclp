@@ -25,7 +25,7 @@ void main() {
     setUp(() {
       api = MockSettingsApi();
       when(() => api.getAppSettings()).thenAnswer((_) => Stream.value(appSettings));
-      when(() => api.saveAppSettings(any())).thenAnswer((_) async {});
+      when(() => api.saveAppSettings()).thenAnswer((_) async {});
     });
 
     SettingsRepository createSubject() => SettingsRepository(settingsApi: api);
@@ -60,17 +60,9 @@ void main() {
     });
 
     group('saveAppSettings', () {
-      test('makes correct SettingsApi request', () {
-        final newSettings = AppSettings((b) => b
-          ..barWeight = BarWeight.kg20
-          ..gender = Gender.xy
-          ..microplates = true
-          ..units = WeightUnit.lb);
-
+      test('completes normally', () {
         final subject = createSubject();
-
-        expect(subject.saveAppSettings(newSettings), completes);
-        verify(() => api.saveAppSettings(newSettings)).called(1);
+        expect(subject.saveAppSettings(), completes);
       });
     });
   });

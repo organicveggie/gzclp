@@ -4,10 +4,10 @@ abstract class SettingsApi {
   const SettingsApi();
 
   Stream<AppSettings> getAppSettings();
-  Future<void> saveAppSettings(AppSettings settings);
+  Future<void> saveAppSettings();
 
   Stream<ExerciseSettings> getExerciseSettings();
-  Future<void> saveExerciseSettings(ExerciseSettings settings);
+  Future<void> saveExerciseSettings();
 
   void loadDefaultAppSettings();
   void loadDefaultTier1Exercises();
