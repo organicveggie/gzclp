@@ -27,4 +27,9 @@ class SettingsRepository {
     _settingsApi.addExercise(tier, exercise);
     return _settingsApi.saveExerciseSettings();
   }
+
+  Future<void> removeExercise(ExerciseTier tier, Exercise exercise) {
+    _settingsApi.removeExercise(tier, exercise);
+    return _settingsApi.saveExerciseSettings();
+  }
 }

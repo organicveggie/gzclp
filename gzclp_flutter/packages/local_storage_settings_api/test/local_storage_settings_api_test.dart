@@ -177,5 +177,48 @@ void main() {
         expect(subject.getExerciseSettings(), emits(modifiedSettings));
       });
     });
+
+    group('removing exercises', () {
+      test('works with empty exercises', () {
+        when(() => plugin.getString(LocalStorageSettingsApi.kExerciseSettingsKey)).thenReturn('{}');
+        final subject = createSubject();
+
+        final modifiedSettings = ExerciseSettings(
+            (b) => b.exercises = BuiltMap<ExerciseTier, BuiltSet<Exercise>>.of({}).toBuilder());
+        subject.removeExercise(ExerciseTier.tier1, Exercise.byName('Bench Press'));
+        expect(subject.getExerciseSettings(), emits(modifiedSettings));
+      });
+
+      test('removes existing exercise', () {
+        const json = '{"exercises":{'
+            '"\\"tier1\\"": [{"name":"Bench Press"},{"name":"Squat"}]}}';
+        when(() => plugin.getString(LocalStorageSettingsApi.kExerciseSettingsKey)).thenReturn(json);
+        final subject = createSubject();
+
+        final modifiedSettings = ExerciseSettings((b) => b
+          ..exercises = BuiltMap<ExerciseTier, BuiltSet<Exercise>>.of({
+            ExerciseTier.tier1: BuiltSet<Exercise>.of([Exercise.byName('Bench Press')]),
+          }).toBuilder());
+
+        subject.removeExercise(ExerciseTier.tier1, Exercise.byName('Squat'));
+        expect(subject.getExerciseSettings(), emits(modifiedSettings));
+      });
+
+      test('works when no matching exercise', () {
+        const json = '{"exercises":{'
+            '"\\"tier1\\"": [{"name":"Bench Press"},{"name":"Squat"}]}}';
+        when(() => plugin.getString(LocalStorageSettingsApi.kExerciseSettingsKey)).thenReturn(json);
+        final subject = createSubject();
+
+        final modifiedSettings = ExerciseSettings((b) => b
+          ..exercises = BuiltMap<ExerciseTier, BuiltSet<Exercise>>.of({
+            ExerciseTier.tier1:
+                BuiltSet<Exercise>.of([Exercise.byName('Bench Press'), Exercise.byName('Squat')]),
+          }).toBuilder());
+
+        subject.removeExercise(ExerciseTier.tier1, Exercise.byName('Deadlift'));
+        expect(subject.getExerciseSettings(), emits(modifiedSettings));
+      });
+    });
   });
 }
