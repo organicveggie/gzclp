@@ -40,3 +40,16 @@ class BarWeight extends EnumClass {
   static BuiltSet<BarWeight> get values => _$barWeightValues;
   static BarWeight valueOf(String name) => _$valueOfBW(name);
 }
+
+class ExerciseTier extends EnumClass {
+  static Serializer<ExerciseTier> get serializer => _$exerciseTierSerializer;
+
+  static const ExerciseTier tier1 = _$tier1;
+  static const ExerciseTier tier2 = _$tier2;
+  static const ExerciseTier tier3 = _$tier3;
+
+  const ExerciseTier._(super.name);
+
+  static BuiltSet<ExerciseTier> get values => _$exerciseTierValues;
+  static ExerciseTier valueOf(String name) => _$valueOfET(name);
+}
