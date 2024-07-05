@@ -9,24 +9,35 @@ class MockSharedPreferences extends Mock implements SharedPreferences {}
 
 void main() {
   group(LocalStorageSettingsApi, () {
-    const rawJson = '{"gender": "xx", "units": "kg", "microplates": true, "barWeight": "kg15",'
-        '"tier1Exercises":[{"name":"Bench Press"}],'
-        '"tier2Exercises":[{"name":"Sumo Deadlift"}],'
-        '"tier3Exercises":[{"name":"Bicep Curls"}]}';
+    const rawAppJson = '{"gender": "xx", "units": "kg", "microplates": true, "barWeight": "kg15"}';
     final appSettings = AppSettings((b) => b
       ..gender = Gender.xx
       ..units = WeightUnit.kg
       ..microplates = true
-      ..barWeight = BarWeight.kg15
-      ..tier1Exercises = BuiltList<Exercise>.of([Exercise.byName('Bench Press')]).toBuilder()
-      ..tier2Exercises = BuiltList<Exercise>.of([Exercise.byName('Sumo Deadlift')]).toBuilder()
-      ..tier3Exercises = BuiltList<Exercise>.of([Exercise.byName('Bicep Curls')]).toBuilder());
+      ..barWeight = BarWeight.kg15);
+
+    const rawExerciseJson = '{"exercises":{'
+        '"\\"tier1\\"": [{"name":"Bench Press"},{"name":"Deadlift"}],'
+        '"\\"tier2\\"":[{"name":"Front Squat"},{"name":"Sumo Deadlift"}],'
+        '"\\"tier3\\"":[{"name":"Bicep Curls"},{"name":"Cable Row"}]'
+        '}}';
+    final exerciseSettings = ExerciseSettings((b) => b
+      ..exercises = BuiltMap<ExerciseTier, BuiltList<Exercise>>.of({
+        ExerciseTier.tier1:
+            BuiltList<Exercise>.of([Exercise.byName('Bench Press'), Exercise.byName('Deadlift')]),
+        ExerciseTier.tier2: BuiltList<Exercise>.of(
+            [Exercise.byName('Front Squat'), Exercise.byName('Sumo Deadlift')]),
+        ExerciseTier.tier3:
+            BuiltList<Exercise>.of([Exercise.byName('Bicep Curls'), Exercise.byName('Cable Row')]),
+      }).toBuilder());
 
     late SharedPreferences plugin;
 
     setUp(() {
       plugin = MockSharedPreferences();
-      when(() => plugin.getString(any())).thenReturn(rawJson);
+      when(() => plugin.getString(LocalStorageSettingsApi.kAppSettingsKey)).thenReturn(rawAppJson);
+      when(() => plugin.getString(LocalStorageSettingsApi.kExerciseSettingsKey))
+          .thenReturn(rawExerciseJson);
       when(() => plugin.setString(any(), any())).thenAnswer((_) async => true);
     });
 
@@ -39,24 +50,39 @@ void main() {
         expect(createSubject, returnsNormally);
       });
 
-      group('initializes the stream', () {
-        test('with existing app settings', () {
-          final subject = createSubject();
-          expect(subject.getAppSettings(), emits(appSettings));
-          verify(() => plugin.getString(LocalStorageSettingsApi.kAppSettingsKey)).called(1);
+      group('initializes the streams', () {
+        group('with existing', () {
+          test('app settings', () {
+            final subject = createSubject();
+            expect(subject.getAppSettings(), emits(appSettings));
+            verify(() => plugin.getString(LocalStorageSettingsApi.kAppSettingsKey)).called(1);
+          });
+          test('exercise settings', () {
+            final subject = createSubject();
+            expect(subject.getExerciseSettings(), emits(exerciseSettings));
+            verify(() => plugin.getString(LocalStorageSettingsApi.kExerciseSettingsKey)).called(1);
+          });
         });
 
-        test('with default when no settings', () {
-          when(() => plugin.getString(any())).thenReturn(null);
-          final subject = createSubject();
-          expect(subject.getAppSettings(), emits(AppSettings.withDefaults()));
-          verify(() => plugin.getString(LocalStorageSettingsApi.kAppSettingsKey)).called(1);
+        group('with default when missing', () {
+          test('app settings', () {
+            when(() => plugin.getString(any())).thenReturn(null);
+            final subject = createSubject();
+            expect(subject.getAppSettings(), emits(AppSettings.withDefaults()));
+            verify(() => plugin.getString(LocalStorageSettingsApi.kAppSettingsKey)).called(1);
+          });
+          test('exercise settings', () {
+            when(() => plugin.getString(any())).thenReturn(null);
+            final subject = createSubject();
+            expect(subject.getExerciseSettings(), emits(ExerciseSettings.withDefaults()));
+            verify(() => plugin.getString(LocalStorageSettingsApi.kExerciseSettingsKey)).called(1);
+          });
         });
       });
     });
 
     group('loads', () {
-      test('all defaults', () {
+      test('app settings defaults', () {
         final subject = createSubject();
         subject.loadDefaultAppSettings();
         expect(subject.getAppSettings(), emits(AppSettings.withDefaults()));
@@ -64,35 +90,32 @@ void main() {
 
       test('tier 1 defaults', () async {
         final subject = createSubject();
-        await subject.saveAppSettings(appSettings);
+        await subject.saveExerciseSettings(exerciseSettings);
 
-        final modifiedSettings =
-            appSettings.rebuild((b) => b..tier1Exercises = defaultTier1Exercises.toBuilder());
+        final modifiedSettings = exerciseSettings.put(ExerciseTier.tier1, defaultTier1Exercises);
 
         subject.loadDefaultTier1Exercises();
-        expect(subject.getAppSettings(), emits(modifiedSettings));
+        expect(subject.getExerciseSettings(), emits(modifiedSettings));
       });
 
       test('tier 2 defaults', () async {
         final subject = createSubject();
-        await subject.saveAppSettings(appSettings);
+        await subject.saveExerciseSettings(exerciseSettings);
 
-        final modifiedSettings =
-            appSettings.rebuild((b) => b..tier2Exercises = defaultTier2Exercises.toBuilder());
+        final modifiedSettings = exerciseSettings.put(ExerciseTier.tier2, defaultTier2Exercises);
 
         subject.loadDefaultTier2Exercises();
-        expect(subject.getAppSettings(), emits(modifiedSettings));
+        expect(subject.getExerciseSettings(), emits(modifiedSettings));
       });
 
       test('tier 3 defaults', () async {
         final subject = createSubject();
-        await subject.saveAppSettings(appSettings);
+        await subject.saveExerciseSettings(exerciseSettings);
 
-        final modifiedSettings =
-            appSettings.rebuild((b) => b..tier3Exercises = defaultTier3Exercises.toBuilder());
+        final modifiedSettings = exerciseSettings.put(ExerciseTier.tier3, defaultTier3Exercises);
 
         subject.loadDefaultTier3Exercises();
-        expect(subject.getAppSettings(), emits(modifiedSettings));
+        expect(subject.getExerciseSettings(), emits(modifiedSettings));
       });
     });
   });

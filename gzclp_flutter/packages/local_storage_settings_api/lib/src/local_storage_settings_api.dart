@@ -16,8 +16,11 @@ class LocalStorageSettingsApi extends SettingsApi {
 
   late final _settingsStreamController =
       BehaviorSubject<AppSettings>.seeded(AppSettings.withDefaults());
+  late final _exerciseSettingsStreamController =
+      BehaviorSubject<ExerciseSettings>.seeded(ExerciseSettings.withDefaults());
 
   static const kAppSettingsKey = '__app_settings_key__';
+  static const kExerciseSettingsKey = '__exercise_settings_key__';
 
   String? _getValue(String key) => _plugin.getString(key);
   Future<void> _setValue(String key, String value) => _plugin.setString(key, value);
@@ -29,6 +32,14 @@ class LocalStorageSettingsApi extends SettingsApi {
       _settingsStreamController.add(settings ?? AppSettings.withDefaults());
     } else {
       _settingsStreamController.add(AppSettings.withDefaults());
+    }
+
+    final exerciseSettingsJson = _getValue(kExerciseSettingsKey);
+    if (exerciseSettingsJson != null) {
+      final settings = _settingsApiSerializer.exerciseSettingsFromJson(exerciseSettingsJson);
+      _exerciseSettingsStreamController.add(settings ?? ExerciseSettings.withDefaults());
+    } else {
+      _exerciseSettingsStreamController.add(ExerciseSettings.withDefaults());
     }
   }
 
@@ -42,24 +53,20 @@ class LocalStorageSettingsApi extends SettingsApi {
 
   @override
   void loadDefaultTier1Exercises() {
-    final settings = _settingsStreamController.value;
-    final newSettings =
-        settings.rebuild((b) => b..tier1Exercises = defaultTier1Exercises.toBuilder());
-    _settingsStreamController.add(newSettings);
+    final settings = _exerciseSettingsStreamController.value;
+    _exerciseSettingsStreamController.add(settings.put(ExerciseTier.tier1, defaultTier1Exercises));
   }
 
   @override
   void loadDefaultTier2Exercises() {
-    final settings = _settingsStreamController.value;
-    _settingsStreamController
-        .add(settings.rebuild((b) => b..tier2Exercises = defaultTier2Exercises.toBuilder()));
+    final settings = _exerciseSettingsStreamController.value;
+    _exerciseSettingsStreamController.add(settings.put(ExerciseTier.tier2, defaultTier2Exercises));
   }
 
   @override
   void loadDefaultTier3Exercises() {
-    final settings = _settingsStreamController.value;
-    _settingsStreamController
-        .add(settings.rebuild((b) => b..tier3Exercises = defaultTier3Exercises.toBuilder()));
+    final settings = _exerciseSettingsStreamController.value;
+    _exerciseSettingsStreamController.add(settings.put(ExerciseTier.tier3, defaultTier3Exercises));
   }
 
   @override
@@ -69,6 +76,20 @@ class LocalStorageSettingsApi extends SettingsApi {
       return _setValue(kAppSettingsKey, appSettingsJson);
     }
 
-    throw const FormatException('unable serialize app settings');
+    throw const FormatException('unable to serialize app settings');
+  }
+
+  @override
+  Stream<ExerciseSettings> getExerciseSettings() =>
+      _exerciseSettingsStreamController.asBroadcastStream();
+
+  @override
+  Future<void> saveExerciseSettings(ExerciseSettings settings) {
+    final settingsJson = _settingsApiSerializer.exerciseSettingsToJson(settings);
+    if (settingsJson != null) {
+      return _setValue(kExerciseSettingsKey, settingsJson);
+    }
+
+    throw const FormatException('unable to serialize exercise settings');
   }
 }
