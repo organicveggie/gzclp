@@ -40,10 +40,10 @@ class TestSettingsApi extends SettingsApi {
   Future<void> saveExerciseSettings(ExerciseSettings settings) {
     throw UnimplementedError('saveExerciseSettings');
   }
-  
+
   @override
-  void addExercise(ExerciseTier tier, Exercise exercise) {
-    throw UnimplementedError('addExercise')
+  ExerciseSettings addExercise(ExerciseTier tier, Exercise exercise) {
+    throw UnimplementedError('addExercise');
   }
 }
 

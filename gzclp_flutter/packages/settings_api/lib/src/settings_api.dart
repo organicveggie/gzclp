@@ -14,5 +14,5 @@ abstract class SettingsApi {
   void loadDefaultTier2Exercises();
   void loadDefaultTier3Exercises();
 
-  void addExercise(ExerciseTier tier, Exercise exercise);
+  ExerciseSettings addExercise(ExerciseTier tier, Exercise exercise);
 }
