@@ -2,14 +2,14 @@ import 'package:built_collection/built_collection.dart';
 
 import 'models/exercise.dart';
 
-final defaultTier1Exercises = BuiltList<Exercise>.of([
+final defaultTier1Exercises = BuiltSet<Exercise>.of([
   Exercise.byName('Bench Press'),
   Exercise.byName('Deadlift'),
   Exercise.byName('Overhead Press'),
   Exercise.byName('Squat'),
 ]);
 
-final defaultTier2Exercises = BuiltList<Exercise>.of([
+final defaultTier2Exercises = BuiltSet<Exercise>.of([
   Exercise.byName('Bench Press'),
   Exercise.byName('Barbell Row'),
   Exercise.byName('Close Grip Bench Press'),
@@ -23,7 +23,7 @@ final defaultTier2Exercises = BuiltList<Exercise>.of([
   Exercise.byName('Sumo Deadlift'),
 ]);
 
-final defaultTier3Exercises = BuiltList<Exercise>.of([
+final defaultTier3Exercises = BuiltSet<Exercise>.of([
   Exercise.byName('Bicep Curls'),
   Exercise.byName('Cable Crunch'),
   Exercise.byName('Cable Row'),

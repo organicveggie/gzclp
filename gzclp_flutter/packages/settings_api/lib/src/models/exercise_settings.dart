@@ -14,16 +14,16 @@ abstract class ExerciseSettings implements Built<ExerciseSettings, ExerciseSetti
   ExerciseSettings._();
   factory ExerciseSettings([void Function(ExerciseSettingsBuilder) updates]) = _$ExerciseSettings;
   factory ExerciseSettings.withDefaults() => ExerciseSettings((b) => b
-    ..exercises = BuiltMap<ExerciseTier, BuiltList<Exercise>>.of({
+    ..exercises = BuiltMap<ExerciseTier, BuiltSet<Exercise>>.of({
       ExerciseTier.tier1: defaultTier1Exercises,
       ExerciseTier.tier2: defaultTier2Exercises,
       ExerciseTier.tier3: defaultTier3Exercises,
     }).toBuilder());
 
-  ExerciseSettings put(ExerciseTier tier, BuiltList<Exercise> newExercises) =>
+  ExerciseSettings put(ExerciseTier tier, BuiltSet<Exercise> newExercises) =>
       ExerciseSettings((b) => b..exercises[tier] = newExercises);
 
-  BuiltMap<ExerciseTier, BuiltList<Exercise>> get exercises;
+  BuiltMap<ExerciseTier, BuiltSet<Exercise>> get exercises;
 
-  BuiltList<Exercise>? getTier(ExerciseTier tier) => exercises[tier];
+  BuiltSet<Exercise>? getTier(ExerciseTier tier) => exercises[tier];
 }

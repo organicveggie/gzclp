@@ -22,13 +22,13 @@ void main() {
         '"\\"tier3\\"":[{"name":"Bicep Curls"},{"name":"Cable Row"}]'
         '}}';
     final exerciseSettings = ExerciseSettings((b) => b
-      ..exercises = BuiltMap<ExerciseTier, BuiltList<Exercise>>.of({
+      ..exercises = BuiltMap<ExerciseTier, BuiltSet<Exercise>>.of({
         ExerciseTier.tier1:
-            BuiltList<Exercise>.of([Exercise.byName('Bench Press'), Exercise.byName('Deadlift')]),
-        ExerciseTier.tier2: BuiltList<Exercise>.of(
+            BuiltSet<Exercise>.of([Exercise.byName('Bench Press'), Exercise.byName('Deadlift')]),
+        ExerciseTier.tier2: BuiltSet<Exercise>.of(
             [Exercise.byName('Front Squat'), Exercise.byName('Sumo Deadlift')]),
         ExerciseTier.tier3:
-            BuiltList<Exercise>.of([Exercise.byName('Bicep Curls'), Exercise.byName('Cable Row')]),
+            BuiltSet<Exercise>.of([Exercise.byName('Bicep Curls'), Exercise.byName('Cable Row')]),
       }).toBuilder());
 
     late SharedPreferences plugin;
@@ -95,8 +95,8 @@ void main() {
 
       test('exercise settings', () {
         final settings = ExerciseSettings((b) => b
-          ..exercises = BuiltMap<ExerciseTier, BuiltList<Exercise>>.of({
-            ExerciseTier.tier1: BuiltList<Exercise>.of(
+          ..exercises = BuiltMap<ExerciseTier, BuiltSet<Exercise>>.of({
+            ExerciseTier.tier1: BuiltSet<Exercise>.of(
                 [Exercise.byName('Bench Press'), Exercise.byName('Deadlift')]),
           }).toBuilder());
         final subject = createSubject(exerciseSettings: settings);
@@ -150,8 +150,8 @@ void main() {
         final subject = createSubject();
 
         final modifiedSettings = ExerciseSettings((b) => b
-          ..exercises = BuiltMap<ExerciseTier, BuiltList<Exercise>>.of({
-            ExerciseTier.tier1: BuiltList<Exercise>.of([Exercise.byName('Bench Press')]),
+          ..exercises = BuiltMap<ExerciseTier, BuiltSet<Exercise>>.of({
+            ExerciseTier.tier1: BuiltSet<Exercise>.of([Exercise.byName('Bench Press')]),
           }).toBuilder());
 
         subject.addExercise(ExerciseTier.tier1, Exercise.byName('Bench Press'));
@@ -165,8 +165,8 @@ void main() {
         final subject = createSubject();
 
         final modifiedSettings = ExerciseSettings((b) => b
-          ..exercises = BuiltMap<ExerciseTier, BuiltList<Exercise>>.of({
-            ExerciseTier.tier1: BuiltList<Exercise>.of([
+          ..exercises = BuiltMap<ExerciseTier, BuiltSet<Exercise>>.of({
+            ExerciseTier.tier1: BuiltSet<Exercise>.of([
               Exercise.byName('Bench Press'),
               Exercise.byName('Deadlift'),
               Exercise.byName('Squat')

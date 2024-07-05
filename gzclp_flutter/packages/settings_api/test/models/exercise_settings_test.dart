@@ -14,11 +14,11 @@ void main() {
     group('serialize', () {
       final serializer = SettingsApiSerializer();
 
-      final emptyMap = BuiltMap<ExerciseTier, BuiltList<Exercise>>.of({});
-      final emptyExercises = BuiltMap<ExerciseTier, BuiltList<Exercise>>.of({
-        ExerciseTier.tier1: BuiltList<Exercise>.of([]),
-        ExerciseTier.tier2: BuiltList<Exercise>.of([]),
-        ExerciseTier.tier3: BuiltList<Exercise>.of([])
+      final emptyMap = BuiltMap<ExerciseTier, BuiltSet<Exercise>>.of({});
+      final emptyExercises = BuiltMap<ExerciseTier, BuiltSet<Exercise>>.of({
+        ExerciseTier.tier1: BuiltSet<Exercise>.of([]),
+        ExerciseTier.tier2: BuiltSet<Exercise>.of([]),
+        ExerciseTier.tier3: BuiltSet<Exercise>.of([])
       });
 
       const rawJson = '{"exercises":{"\\"tier1\\"":[],"\\"tier2\\"":[],"\\"tier3\\"":[]}}';
@@ -33,7 +33,7 @@ void main() {
         test('works with tier 1 exercises json', () {
           final expected = ExerciseSettings((b) => b..exercises = emptyMap.toBuilder()).put(
               ExerciseTier.tier1,
-              BuiltList<Exercise>.of([
+              BuiltSet<Exercise>.of([
                 Exercise.byName('Bench Press'),
                 Exercise.byName('Deadlift'),
               ]));
@@ -48,7 +48,7 @@ void main() {
         test('works with tier 2 exercises json', () {
           final expected = ExerciseSettings((b) => b..exercises = emptyMap.toBuilder()).put(
               ExerciseTier.tier2,
-              BuiltList<Exercise>.of([
+              BuiltSet<Exercise>.of([
                 Exercise.byName('Front Squat'),
                 Exercise.byName('Sumo Deadlift'),
               ]));
@@ -63,7 +63,7 @@ void main() {
         test('works with tier 3 exercises json', () {
           final expected = ExerciseSettings((b) => b..exercises = emptyMap.toBuilder()).put(
               ExerciseTier.tier3,
-              BuiltList<Exercise>.of([
+              BuiltSet<Exercise>.of([
                 Exercise.byName('Bicep Curls'),
                 Exercise.byName('Cable Row'),
               ]));

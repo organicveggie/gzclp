@@ -25,10 +25,10 @@ class SettingsApiSerializer {
     _standardSerializers = (serializers.toBuilder()
           ..addPlugin(StandardJsonPlugin())
           ..addBuilderFactory(
-              const FullType(BuiltList, [FullType(Exercise)]), () => ListBuilder<Exercise>())
+              const FullType(BuiltSet, [FullType(Exercise)]), () => SetBuilder<Exercise>())
           ..addBuilderFactory(
-              const FullType(BuiltMap, [FullType(ExerciseTier), FullType(BuiltList<Exercise>)]),
-              () => MapBuilder<ExerciseTier, BuiltList<Exercise>>))
+              const FullType(BuiltMap, [FullType(ExerciseTier), FullType(BuiltSet<Exercise>)]),
+              () => MapBuilder<ExerciseTier, BuiltSet<Exercise>>))
         .build();
   }
 

@@ -20,9 +20,9 @@ void main() {
       ..barWeight = BarWeight.kg15);
 
     final exerciseSettings = ExerciseSettings((b) => b
-      ..exercises = BuiltMap<ExerciseTier, BuiltList<Exercise>>.of({
+      ..exercises = BuiltMap<ExerciseTier, BuiltSet<Exercise>>.of({
         ExerciseTier.tier1:
-            BuiltList<Exercise>.of([Exercise.byName('Bench Press'), Exercise.byName('Deadlift')])
+            BuiltSet<Exercise>.of([Exercise.byName('Bench Press'), Exercise.byName('Deadlift')])
       }).toBuilder());
 
     setUpAll(() {
