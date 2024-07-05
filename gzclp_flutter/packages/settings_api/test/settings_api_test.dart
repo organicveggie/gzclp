@@ -31,6 +31,10 @@ class TestSettingsApi extends SettingsApi {
 
   @override
   void addExercise(ExerciseTier tier, Exercise exercise) => throw UnimplementedError('addExercise');
+
+  @override
+  void removeExercise(ExerciseTier tier, Exercise exercise) =>
+      throw UnimplementedError('removeExercise');
 }
 
 void main() {

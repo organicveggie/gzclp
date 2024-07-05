@@ -116,4 +116,15 @@ class LocalStorageSettingsApi extends SettingsApi {
 
     _exerciseSettingsStreamController.add(settings.put(tier, exerciseList.toBuiltList()));
   }
+
+  @override
+  void removeExercise(ExerciseTier tier, Exercise exercise) {
+    final settings = _exerciseSettingsStreamController.value;
+    final exercises = settings.getTier(tier);
+    if ((exercises == null) || (exercises.isEmpty)) {
+      return;
+    }
+
+    // TODO
+  }
 }
