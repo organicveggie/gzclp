@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:settings_api/settings_api.dart';
@@ -18,6 +19,12 @@ void main() {
       ..microplates = true
       ..barWeight = BarWeight.kg15);
 
+    final exerciseSettings = ExerciseSettings((b) => b
+      ..exercises = BuiltMap<ExerciseTier, BuiltList<Exercise>>.of({
+        ExerciseTier.tier1:
+            BuiltList<Exercise>.of([Exercise.byName('Bench Press'), Exercise.byName('Deadlift')])
+      }).toBuilder());
+
     setUpAll(() {
       registerFallbackValue(FakeAppSettings());
     });
@@ -26,6 +33,8 @@ void main() {
       api = MockSettingsApi();
       when(() => api.getAppSettings()).thenAnswer((_) => Stream.value(appSettings));
       when(() => api.saveAppSettings()).thenAnswer((_) async {});
+      when(() => api.getExerciseSettings()).thenAnswer((_) => Stream.value(exerciseSettings));
+      when(() => api.saveExerciseSettings()).thenAnswer((_) async {});
     });
 
     SettingsRepository createSubject() => SettingsRepository(settingsApi: api);
@@ -63,6 +72,13 @@ void main() {
       test('completes normally', () {
         final subject = createSubject();
         expect(subject.saveAppSettings(), completes);
+      });
+    });
+
+    group('addExercise', () {
+      test('completes normally', () {
+        final subject = createSubject();
+        expect(subject.addExercise(ExerciseTier.tier1, Exercise.byName('Squats')), completes);
       });
     });
   });
