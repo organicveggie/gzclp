@@ -118,5 +118,39 @@ void main() {
         expect(subject.getExerciseSettings(), emits(modifiedSettings));
       });
     });
+
+    group('adding an exercise', () {
+      test('works with empty list', () async {
+        when(() => plugin.getString(LocalStorageSettingsApi.kExerciseSettingsKey)).thenReturn('{}');
+        final subject = createSubject();
+
+        final modifiedSettings = ExerciseSettings((b) => b
+          ..exercises = BuiltMap<ExerciseTier, BuiltList<Exercise>>.of({
+            ExerciseTier.tier1: BuiltList<Exercise>.of([Exercise.byName('Bench Press')]),
+          }).toBuilder());
+
+        subject.addExercise(ExerciseTier.tier1, Exercise.byName('Bench Press'));
+        expect(subject.getExerciseSettings(), emits(modifiedSettings));
+      });
+
+      test('works with one item in list', () async {
+        const json = '{"exercises":{'
+            '"\\"tier1\\"": [{"name":"Bench Press"},{"name":"Squat"}]}}';
+        when(() => plugin.getString(LocalStorageSettingsApi.kExerciseSettingsKey)).thenReturn(json);
+        final subject = createSubject();
+
+        final modifiedSettings = ExerciseSettings((b) => b
+          ..exercises = BuiltMap<ExerciseTier, BuiltList<Exercise>>.of({
+            ExerciseTier.tier1: BuiltList<Exercise>.of([
+              Exercise.byName('Bench Press'),
+              Exercise.byName('Deadlift'),
+              Exercise.byName('Squat')
+            ]),
+          }).toBuilder());
+
+        subject.addExercise(ExerciseTier.tier1, Exercise.byName('Deadlift'));
+        expect(subject.getExerciseSettings(), emits(modifiedSettings));
+      });
+    });
   });
 }

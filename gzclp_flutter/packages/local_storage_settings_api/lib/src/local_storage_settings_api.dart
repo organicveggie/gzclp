@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:built_collection/built_collection.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:settings_api/settings_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -91,5 +92,15 @@ class LocalStorageSettingsApi extends SettingsApi {
     }
 
     throw const FormatException('unable to serialize exercise settings');
+  }
+
+  @override
+  void addExercise(ExerciseTier tier, Exercise exercise) {
+    final settings = _exerciseSettingsStreamController.value;
+    final exerciseList = settings.getTier(tier)?.toList() ?? <Exercise>[];
+    exerciseList.add(exercise);
+    exerciseList.sort((a, b) => a.name.compareTo(b.name));
+
+    _exerciseSettingsStreamController.add(settings.put(tier, exerciseList.toBuiltList()));
   }
 }
